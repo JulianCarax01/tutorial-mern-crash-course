@@ -18,24 +18,26 @@ const setGoals = asyncHandler(async (req, res) => {
     res.status(200).json(newGoal)
 
 })
+
 const putGoals = asyncHandler(async (req, res) => {
     const goal = await Goal.findById(req.params.id)
     if (!goal) {
         res.status(404)
         throw new Error("Goal not found")
     } else {
-        const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body.text, {new: true})
+        const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, {text: `${req.body.text}`}, {new: true})
         res.status(200).json(updatedGoal)
     }
 })
+
 const deleteGoals = asyncHandler(async (req, res) => {
     const goal = await Goal.findById(req.params.id)
     if (!goal) {
         res.status(404)
         throw new Error("Goal not found")
     } else {
-        const deletedGoal = await Goal.findByIdAndDelete(req.params.id)
-        res.status(200).json(deletedGoal)
+        await Goal.findByIdAndDelete(req.params.id)
+        res.status(200).end()
     }
 })
 
